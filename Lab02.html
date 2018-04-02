@@ -3,65 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Lab02</title>
+    <link href="Lab02.css" rel="stylesheet">
 </head>
 <body>
 <header>
-    <h1><img src="images/logo.png">Share Your Travels</h1>
+    <div class="header">
+        <h1>Share Your Travels</h1>
+        <p>Let us know where you've been</p>
+    </div>
 </header>
 <nav>
-    <ul>
-        <li><a href="#">Description</a></li>
-        <li><a href="#">Related Photos</a></li>
-        <li><a href="#">Reviews</a></li>
+    <ul class="titlebar">
+        <li><a href="#description">Description</a></li><li><a href="#related_photos">Related Photos</a></li><li><a href="#reviews">Reviews</a></li>
     </ul>
 </nav>
 <main>
-    <h2>
-        New York - Central Park
-    </h2>
     <section>
-        <h3>Description</h3>
-        <p>Photo by Randy Connolly</p>
-        <p>This photo of Conservatory Pond in <a href="#">Central Park</a>
-        in <a href="#">New York City</a> was taken on October 22,2016 with a Canon EOS 30D camera.
-        </p>
+        <h2>New York - Central Park<a name="description"></a></h2>
         <figure>
             <a href="images/large-central-park.jpg" target="_blank"><img src="images/central-park.jpg" alt="Central Park"></a>
             <figcaption><i>Conservatory Pond in Central Park</i></figcaption>
         </figure>
-        <p>Options:<a href="#"><img src="images/icon_download.png"></a>
+        <p class="description">This photo of Conservatory Pond in <a href="#" class="bold_a">Central Park</a>
+        in <a href="#" class="bold_a">New York City</a> was taken on October 22,2016 with a Canon EOS 30D camera.
+        </p>
+        <div class="options">
+            <a href="#"><img src="images/icon_download.png"></a>
             <a href="#"><img src="images/icon_mail.png"></a>
             <a href="#"><img src="images/icon_map.png"></a>
             <a href="#"><img src="images/icon_up.png"></a>
             <a href="#"><img src="images/icon_down.png"></a>
-        </p>
-    </section>
-    <section>
-        <h3>Related Photos</h3>
-        <a href="images/related-large1.jpg" target="_blank"><img src="images/related-square1.jpg"></a>
-        <a href="images/related-large2.jpg" target="_blank"><img src="images/related-square2.jpg"></a>
-        <a href="images/related-large3.jpg" target="_blank"><img src="images/related-square3.jpg"></a>
-    </section>
-    <section>
-        <h3>Reviews</h3>
-        <div>
-            <h4><img src="images/icon_comment.png">Ricardo on 2016-05-23</h4>
-            <p>Easy on the HDR buddy.</p>
-            <hr>
         </div>
-        <div>
-            <h4><img src="images/icon_comment.png">Susan on 2016-11-18</h4>
-            <p>I love Central Park.</p>
-            <hr>
+    </section>
+    <section>
+        <h2>Related Photos<a name="related_photos"></a></h2>
+        <a href="images/related-large1.jpg" target="_blank"><img src="images/related-square1.jpg"></a>
+        <a href="images/related-large1.jpg" target="_blank"><img src="images/related-square2.jpg"></a>
+        <a href="images/related-large1.jpg" target="_blank"><img src="images/related-square3.jpg"></a>
+        <!--换行表示为空格间距-->
+    </section>
+    <section class="last_section">
+        <h2>Reviews<a name="reviews"></a></h2>
+        <div class="review_div">
+            <p class="review_name">By Ricardo on <time datetime="2016-05-23">2016-05-23</time></p>
+            <p class="review_body">Easy on the HDR buddy.</p>
+        </div>
+        <div class="review_div">
+            <p class="review_name">By Susan on <time datetime="2016-11-18">2016-11-18</time></p>
+            <p class="review_body">I love Central Park.</p>
         </div>
     </section>
 </main>
 <footer>
-<div>
-    <a href="#">Home</a><span> | </span><a href="#">Browse</a><span> | </span><a href="#">Search</a>
+<div class="other_link">
+    <a href="#">Home</a><span class="footer_span"> | </span><a href="#">Browse</a><span class="footer_span"> | </span><a href="#">Search</a>
 </div>
-    <br>
-    <i>Copyright &copy 2017 Share Your Travels</i>
+    <span class="footer_span"><i>Copyright &copy 2017 Share Your Travels</i></span>
 </footer>
 </body>
 </html>

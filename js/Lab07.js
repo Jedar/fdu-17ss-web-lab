@@ -112,12 +112,28 @@
                 colInput.setAttribute("type","text");
                 colInput.setAttribute("placeholder","Attribute");
                 colInput.setAttribute("name","colName"+i);
+                colInput.addEventListener("change",showCommit);//add listener to col name input
                 div_colName.appendChild(colInput);
             }
-            show(div_colName,bt_commit);
+            show(div_colName);
         }
         else {
-            hide(div_colName,bt_commit);
+            hide(div_colName);
+        }
+    }
+    function showCommit() {
+        //check is there empty input, if not show commit button
+        let isEmpty;
+        let colNum = parseInt(form.elements["tableNum"].value);
+        let colName = [];
+        for (let i = colNum - 1; i >= 0; i--){
+            isEmpty = isEmpty||!form.elements["colName"+i].value;
+        }
+        if (!isEmpty){
+            show(bt_commit);
+        }
+        else {
+            hide(bt_commit);
         }
     }
     function show() {

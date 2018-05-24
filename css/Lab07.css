@@ -1,0 +1,49 @@
+main{
+    text-align: center;
+}
+select{
+    width: 300px;
+    display: block;
+    margin: 0.5em auto;
+}
+main div{
+    margin: 0.5em auto;
+}
+#bt-commit{
+    width: 300px;
+    margin: 0 auto 20px auto;
+}
+#tableInfo input{
+    width: 140px;
+    margin: 5px;
+}
+#colName input{
+    width: 140px;
+    margin: 10px;
+}
+#rowValue input{
+    width: 140px;
+    margin: 10px;
+}
+#tip p{
+    font-size: large;
+    color: #ff144f;
+}
+table{
+    margin: auto;
+    padding: 0;
+}
+table thead{
+    background-color: grey;
+    color: whitesmoke;
+}
+table td{
+    padding: 0 0.5em;
+    width: 8em;
+}
+table tr:nth-child(even) td{
+    background-color: lightgrey;
+}
+.hidden{
+    display: none;
+}

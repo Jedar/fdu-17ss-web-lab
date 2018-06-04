@@ -41,11 +41,12 @@ include 'travel-data.inc.php';
               /* you will need to fill this place with appropriate PHP */
               /* hint: use array and loop */
               //the next line is an example
-              //<a href="list.php?country=Canada" role="button" class="btn btn-default"> Canada</a> 
-
-
+              //<a href="list.php?country=Canada" role="button" class="btn btn-default"> Canada</a>
+              sort($countries);
+              foreach ($countries as $key => $val){
+                  echo "<a href='list.php?country=$val' role='button' class='btn btn-default'> $val</a>";
+              }
               ?>
-                     
         </div>               
            
         
@@ -59,18 +60,32 @@ include 'travel-data.inc.php';
           //you need to fill the elements with data provided
 
 
-   //        <li>
-   //              <a href="detail.php?id=22" class="img-responsive">
-   //              	<img src="images/square/6114850721.jpg" alt="View of Cologne">
-   //              	<div class="caption">
-   //              		<div class="blur">
-   //              		</div>
-   //              		<div class="caption-text">
-   //              			<h1>View of Cologne</h1>
-   //              		</div>
-   //              	</div>
-   //              </a>
-			// </li>
+//           <li>
+//                 <a href="detail.php?id=22" class="img-responsive">
+//                 	<img src="images/square/6114850721.jpg" alt="View of Cologne">
+//                 	<div class="caption">
+//                 		<div class="blur">
+//                 		</div>
+//                 		<div class="caption-text">
+//                 			<h1>View of Cologne</h1>
+//                 		</div>
+//                 	</div>
+//                 </a>
+//			 </li>
+          foreach ($images as $key => $val){
+              echo "<li>
+                 <a href='detail.php?id={$val["id"]}' class='img-responsive'>
+                 	<img src='images/square/{$val["path"]}' alt='{$val["title"]}'>
+                 	<div class='caption'>
+                 		<div class='blur'>
+                 		</div>
+                 		<div class='caption-text'>
+                 			<h1>{$val["title"]}</h1>
+                 		</div>
+                 	</div>
+                 </a>
+			 </li>";
+          }
           ?>
 
        </ul>       

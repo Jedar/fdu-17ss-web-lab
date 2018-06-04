@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<header class="container">
+    <nav class="navbar navbar-expand-lg row">
+        <div class="col-sm-4 navbar-text">
+            <h1 class="text-center">Share Your Travels</h1>
+            <p class="text-center font-weight-bold">Let us know where you've been</p>
+        </div>
+        <div class="col-sm-8" id="navbarText">
+            <ul class="navbar-nav nav-pills nav-justified">
+                <li class="nav-item">
+                    <a href="upload.html" class="nav-link text-secondary">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-secondary">Related Photos</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-secondary">Reviews</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main class="container">
+    <div class="row">
+        <section class="col-md-8 border rounded">
+            <div class="container">
+                <br>
+                <h2>New York - Central Park<a name="description"></a></h2>
+                <figure>
+                    <figcaption><i>Conservatory Pond in Central Park</i></figcaption>
+                    <a href="images/large-central-park.jpg"><img src="images/central-park.jpg" alt="Central Park" class="w-100"></a>
+                </figure>
+                <p class="description">This photo of Conservatory Pond in <a href="#" class="bold_a">Central Park</a>
+                    in <a href="#" class="bold_a">New York City</a> was taken on October 22,2016 with a Canon EOS 30D camera.
+                </p>
+                <div class="text-right">
+                    <div class="btn-group">
+                        <a class="btn btn-light" href="#"><img src="images/icon_download.png"></a>
+                        <a class="btn btn-light" href="#"><img src="images/icon_mail.png"></a>
+                        <a class="btn btn-light" href="#"><img src="images/icon_map.png"></a>
+                        <a class="btn btn-light" href="#"><img src="images/icon_up.png"></a>
+                        <a class="btn btn-light" href="#"><img src="images/icon_down.png"></a>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </section>
+        <aside class="col-md-3">
+            <section class="border rounded container">
+                <br>
+                <h3>Related Photos</h3>
+                <div id="related-photos" class="carousel slide" data-ride="carousel">
+                    <ul class="carousel-indicators">
+                        <li data-target="#related-photos" data-slide-to="0" class="active"></li>
+                        <li data-target="#related-photos" data-slide-to="1"></li>
+                        <li data-target="#related-photos" data-slide-to="2"></li>
+                    </ul>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <a href="images/related-large1.jpg"><img class="w-100" src="images/related-square1.jpg"></a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="images/related-large2.jpg"><img class="w-100" src="images/related-square2.jpg"></a>
+                        </div>
+                        <div class="carousel-item">
+                            <a href="images/related-large3.jpg"><img class="w-100" src="images/related-square3.jpg"></a>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#related-photos" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#related-photos" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+                </div>
+            </section>
+            <section class="border rounded container">
+                <br>
+                <h3>Reviews</h3>
+                <!--need to be row in sm-->
+                <div class="text-center row justify-content-center">
+                    <div class="col-2 col-sm-12">
+                        <a href="#" data-toggle="collapse" data-target="#review1" style="color: #000000;text-decoration: none"><h5 class="text-italic">Ricardo</h5></a>
+                    </div>
+                    <div class="col-2 col-sm-12">
+                        <a href="#" data-toggle="collapse" data-target="#review1"><span class="badge badge-pill badge-info">2016-05-23</span></a>
+                    </div>
+                    <div class="col-6 col-sm-12">
+                        <p id="review1" class="collapse">Easy on the HDR buddy.</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center row justify-content-center">
+                    <div class="col-2 col-sm-12">
+                        <a href="#" data-toggle="collapse" data-target="#review2" style="color: #000000;text-decoration: none"><h5 class="text-italic">Susan</h5></a>
+                    </div>
+                    <div class="col-2 col-sm-12">
+                        <a href="#" data-toggle="collapse" data-target="#review2"><span class="badge badge-pill badge-info">2016-11-18</span></a>
+                    </div>
+                    <div class="col-6 col-sm-12">
+                        <p id="review2" class="collapse">I love Central Park.</p>
+                    </div>
+                </div>
+                <br>
+            </section>
+        </aside>
+    </div>
+</main>
+<footer class="container text-center">
+    <nav class="navbar navbar-expand-lg row justify-content-center">
+        <div class="col-sm-8">
+            <ul class="navbar-nav nav-pills nav-justified">
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-info">Home </a></li>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-info">Browse </a></li>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link text-info">Search </a></li>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <span class="footer_span"><i>Copyright &copy 2017 Share Your Travels</i></span>
+</footer>
+</body>
+</html>

@@ -3,8 +3,35 @@
 
 //****** Hint ******
 //connect database and fetch data here
-
-
+$db = new mysqli('localhost','root','psw010105','travel');//password will change after commit
+//find continents
+$query = "SELECT * FROM continents";
+$resultContinent = $db->query($query);
+//find countries
+$query = "SELECT * FROM countries";
+$resultCountries = $db->query($query);
+//find images
+$continent = "";
+$country = "";
+$title = "";
+if (isset($_REQUEST['continent'])){
+    $continent = ($_REQUEST['continent']&&$_REQUEST['continent']!="0")?$_REQUEST['continent']:"";
+}
+if (isset($_REQUEST['country'])){
+    $country = ($_REQUEST['country']&&$_REQUEST['country']!="0")?$_REQUEST['country']:"";
+}
+if (isset($_REQUEST['title'])){
+    $title = ($_REQUEST['title'])?$_REQUEST['title']:"";
+}
+$query = "SELECT * FROM imagedetails";
+$query.=" WHERE Title LIKE '%$title%'";
+if ($continent!=""){
+    $query.=" AND ContinentCode = '$continent'";
+}
+if ($country!=""){
+    $query.=" AND CountryCodeISO = '$country'";
+}
+$resultImage = $db->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +74,7 @@
                 //****** Hint ******
                 //display the list of continents
 
-                while($row = $result->fetch_assoc()) {
+                while($row = $resultContinent->fetch_assoc()) {
                   echo '<option value=' . $row['ContinentCode'] . '>' . $row['ContinentName'] . '</option>';
                 }
 
@@ -60,7 +87,10 @@
                 //Fill this place
 
                 //****** Hint ******
-                /* display list of countries */ 
+                /* display list of countries */
+                while($row = $resultCountries->fetch_assoc()) {
+                    echo '<option value=' . $row['ISO'] . '>' . $row['CountryName'] . '</option>';
+                }
                 ?>
               </select>    
               <input type="text"  placeholder="Search title" class="form-control" name=title>
@@ -89,7 +119,20 @@
                 </div>
               </a>
             </li>        
-            */ 
+            */
+            while ($row = $resultImage->fetch_assoc()){
+                echo "<li>
+              <a href='detail.php?id=".$row['ImageID']."' class= 'img-responsive'>
+                <img src='images/square-medium/".$row['Path']."' alt=".$row['Title'].">
+                <div class='caption'>
+                  <div class='blur'></div>
+                  <div class='caption-text'>
+                    <h1>".$row['Title']."</h1>
+                  </div>
+                </div>
+              </a>
+            </li> ";
+            }
             ?>
        </ul>       
 

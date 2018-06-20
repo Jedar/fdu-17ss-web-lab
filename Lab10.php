@@ -3,7 +3,11 @@
 
 //****** Hint ******
 //connect database and fetch data here
-$db = new mysqli('localhost','root','psw010105','travel');//password will change after commit
+$host = 'localhost';
+$dbuser = 'root';
+$passwd = 'psw010105';
+$dbname = 'travel';
+$db = new mysqli($host,$dbuser,$passwd,$dbname);//password will change after commit
 //find continents
 $query = "SELECT * FROM continents";
 $resultContinent = $db->query($query);

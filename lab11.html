@@ -36,14 +36,12 @@
             width: 100%;
             height: 100%;
         }
-        #td_submit {
-            text-align: center;
-        }
         select {
             display: block;
         }
         .sel{
             color: red;
+            font-size: larger;
             font-weight: bolder;
         }
         #lyric{
@@ -94,7 +92,7 @@
             <tr><td>Title: <input type="text" id="title" name='title'></td><td>Artist: <input type="text" name='artist' id='artist'></td></tr>
             <tr><td colspan="2"><textarea name="edit_lyric" id="edit_lyric"></textarea></td></tr>
             <tr><td><input type="button" value="插入时间标签" id="bt-insert"></td><td><input type="button" id="bt-replace" value="替换时间标签"></td></tr>
-            <tr><td colspan="2" id="td_submit"><input type="submit" value="Submit"></td></tr>
+            <tr><td colspan="2"><input type="button" value="Submit" id="bt-submit"></td></tr>
         </table>
     </form>
 </section>
@@ -108,7 +106,7 @@
     </select>
 
     <div id="lyric" >
-        <ul id="music_words" style="margin-top: 240px"></ul>
+        <ul id="lyric-div" style="margin-top: 240px"></ul>
     </div>
     <!--TODO: 在这里补充 html 元素，使选择了歌曲之后这里展示歌曲进度条，并且支持上下首切换-->
 </section>
@@ -161,35 +159,59 @@
     }
 
     //先得到数据库中的音乐信息
-    $.ajax({
-        type:"GET",
-        url:'getdir.php',
-        success:function(data){
-            let mydir = eval(data);
-            if (mydir.length) {
-                let select=$("#selectmusic")[0];
-                for (let i = 0; i < mydir.length; i++) {
-                    let newoption=document.createElement("option");
-                    $(newoption).val(mydir[i]).html(mydir[i].split('.')[0]);
-                    select.appendChild(newoption);
-                }
+    $.post('getdir.php',{
+
+    },function (data) {
+        let mydir = JSON.parse(data);
+        if (mydir.length) {
+            let select=$("#selectmusic")[0];
+            for (let i = 0; i < mydir.length; i++) {
+                let newoption=document.createElement("option");
+                $(newoption).val(mydir[i]).html(mydir[i].split('.')[0]);
+                select.appendChild(newoption);
             }
         }
     });
-    //提交表单前的验证
-    $('#td_submit').click(function(){
+    //提交音乐文件
+    $('#bt-submit').click(function(){
         let edit_lyric = $('#edit_lyric');
         if($('#audio').attr('src')){
             if(!edit_lyric.val()){
                 alert('请输入歌词');
                 return false;
             }
+            else {
+                let file = document.getElementById("file_upload").files[0];
+                let formData = new FormData();
+                formData.append('file',file);
+                formData.append('edit_lyric',edit_lyric.val());
+                formData.append('title',$("#title").val());
+                formData.append('artist',$("#artist").val());
+                $.ajax({
+                    url: 'lab11_handle.php',
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (result.filestate){
+                            alert('上传成功');
+                            window.location.assign(window.location.href);
+                        }
+                        else {
+                            alert('上传失败');
+                        }
+                    }
+                });
+            }
         }else{
             alert('请先导入音乐文件');
             return false;
         }
     });
-    //自动播放
+    //选择音乐后播放
     $('#file_upload').on('change',function(){
         let filePath = $(this).val(),
             fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
@@ -206,9 +228,6 @@
         if($('#audio').attr('src')){
             let currentTime = document.getElementById('audio').currentTime;
             let hour = parseInt(currentTime / 3600);
-            if (hour < 10) {
-                hour = "0" + hour;
-            }
             let minute = currentTime / 60;
             minute = parseInt(minute);
             if (minute < 10) {
@@ -218,10 +237,11 @@
             if (second < 10) {
                 second = "0" + second;
             }
-            let value = $('#edit_lyric').val();
-            $('#edit_lyric').val(value + "[" + hour + ':' + minute + ":" + second + "]" + '\n');
+            let edit_lyric = $('#edit_lyric');
+            let value = edit_lyric.val();
+            edit_lyric.val(value + "[" + minute + ":" + second + "]" + '\n');
         }else{
-            alert('请先导入音乐文件');
+            alert('未导入音乐文件');
         }
     });
     //替换标签
@@ -229,9 +249,6 @@
         if($('#audio').attr('src')){
             let currentTime = document.getElementById('audio').currentTime;
             let hour = parseInt(currentTime / 3600);
-            if (hour < 10) {
-                hour = "0" + hour;
-            }
             let minute = currentTime / 60;
             minute = parseInt(minute);
             if (minute < 10) {
@@ -242,12 +259,12 @@
                 second = "0" + second;
             }
 
-            let value = $('#edit_lyric').val();
-            $('#edit_lyric').val(value.substring(0,get_target_pos(edit_lyric_pos)) + "[" + hour + ':' + minute + ":" + second + "]" + value.substring(get_target_pos(edit_lyric_pos) + 13,value.length));
+            let edit_lyric = $('#edit_lyric');
+            let value = edit_lyric.val();
+            edit_lyric.val(value.substring(0,get_target_pos(edit_lyric_pos)) + "[" + minute + ":" + second + "]" + value.substring(get_target_pos(edit_lyric_pos) + 13,value.length));
         }else{
-            alert('请先导入音乐文件');
+            alert('未导入音乐文件');
         }
-
     });
     /* HINT:
      * 已经帮你写好了寻找每行开头的位置，可以使用 get_target_pos()
@@ -269,77 +286,84 @@
      *
      * TODO: 请实现你的歌词滚动效果。
      */
-    // $("#selectmusic").change(function(){
-    //     if ($(this).val() !== "0") {
-    //         let value = $(this).val();
-    //         $("#audio_show").attr("src", "upload/" + value);
-    //         $.ajax({
-    //             type: "GET",
-    //             url: 'getlyric.php',
-    //             data:{"value":value.split('.')[0]},
-    //             success: function (data) {
-    //                 let lyricData=data.split('\n');
-    //                 let formatTime = function (time) {
-    //                     let m = time.split(':')[0];
-    //                     let s = time.split(':')[1];
-    //                     return Number(m) * 60 + Number(s);
-    //                 };
-    //
-    //                 let lyricArray = [];
-    //                 for (let i = 0; i < lyricData.length; i++) {
-    //                     let tmpTime = /\d+:\d+.\d+/.exec(lyricData[i]);
-    //                     let tmpLyric = lyricData[i].split(/[\\[]\d+:\d+.\d+]/);
-    //                     if (tmpTime != null) {
-    //                         lyricArray.push({time: formatTime(String(tmpTime)), lyric: tmpLyric[1]});
-    //                     }
-    //                 }
-    //
-    //                 for (let i = 0; i < lyricArray.length; i++) {
-    //                     let lyricBorder = document.getElementById('words');
-    //                     let lyricEl = document.createElement('li');
-    //                     lyricEl.innerHTML = lyricArray[i].lyric;
-    //                     lyricBorder.appendChild(lyricEl);
-    //                 }
-    //
-    //                 let audio = document.getElementById('audio_show');
-    //                 let count = 0;
-    //
-    //                 let vaildTime = function (time, index) {
-    //                     if (index < lyricArray.length - 1) {
-    //                         return time >= lyricArray[index].time && time <= lyricArray[index + 1].time;
-    //                     } else {
-    //                         return time <= audio.duration;
-    //                     }
-    //                 };
-    //                 let wordEl = document.getElementById('words');
-    //                 let marTop = parseInt(wordEl.style.marginTop);
-    //                 audio.ontimeupdate = function () {
-    //                     let time = audio.currentTime;
-    //                     if (!vaildTime(time, count)) {
-    //                         count++;
-    //                     }
-    //                     wordEl.style.marginTop = (marTop - count * 48) + 'px';
-    //                     let li = wordEl.querySelectorAll('li');
-    //                     for (let i = 0; i < li.length; i++) {
-    //                         li[i].removeAttribute('class');
-    //                     }
-    //                     wordEl.querySelectorAll('li')[count].setAttribute('class', 'sel');
-    //                     if (audio.ended) {
-    //                         wordEl.style.marginTop = marTop + 'px';
-    //                         count = 0;
-    //                     }
-    //                 };
-    //                 audio.onseeked = function () {
-    //                     let cur_time = audio.currentTime;
-    //                     for (let _i = 0; _i <= lyricArray.length - 1; _i++) {
-    //                         if (cur_time >= lyricArray[_i].time && cur_time <= lyricArray[_i + 1].time)
-    //                             count = _i;
-    //                     }
-    //                 }
-    //
-    //             }
-    //         });
-    //     }
-    // });
+    $("#selectmusic").change(function(){
+        if ($(this).val() !== "0") {
+            let value = $(this).val();
+            let audio = document.getElementById('audio_show');
+            let count = 0;
+            let wordEl = document.getElementById('lyric-div');
+            wordEl.innerText = "";
+            $("#audio_show").attr("src", "upload/" + value);
+            $.post('getlyric.php',{
+                "value":value.split('.')[0]
+            },function (data) {
+                let lyricData=data.split('\n');
+                function formatTime(time) {
+                    let min = time.split(':')[0];
+                    let sec = time.split(':')[1];
+                    let ms = sec.split('.')[1];
+                    sec = sec.split('.')[0];
+                    ms = ms.slice(0,2);
+                    sec = sec+"."+ms;
+                    return parseInt(min) * 60 + parseFloat(sec);
+                }
+                let lyricArr = [];
+                for (let i = 0; i < lyricData.length; i++) {
+                    let tmpTime = /\d+:\d+.\d+/.exec(lyricData[i]);
+                    if (tmpTime != null) {
+                        let tmpLyric = lyricData[i].split(']')[1];//得到歌词信息
+                        lyricArr.push({time: formatTime(tmpTime+""), lyric: tmpLyric});//这里用对象储存，用map也行
+                    }
+                }
+                for (let i = 0; i < lyricArr.length; i++) {
+                    let lyricBorder = document.getElementById('lyric-div');
+                    let lyricEl = document.createElement('li');
+                    lyricEl.innerHTML = lyricArr[i].lyric;//输入歌词
+                    lyricBorder.appendChild(lyricEl);
+                }
+                let marTop = parseInt(wordEl.style.marginTop);
+                audio.ontimeupdate = function () {
+                    let time = audio.currentTime + "";
+                    let ms = time.split('.')[1];
+                    ms = ms.slice(0,2);
+                    time = time.split('.')[0];
+                    time = time+'.'+ms;
+                    time = parseFloat(time);
+                    if (!isVaildTime(time, count)) {
+                        if (lyricArr[count+1].time = time){
+                            count++;
+                        }
+                    }
+                    wordEl.style.marginTop = (marTop - count * 20) + 'px';
+                    let li = wordEl.querySelectorAll('li');
+                    for (let i = 0; i < li.length; i++) {
+                        if (i === count){
+                            li[count].setAttribute('class', 'sel');
+                            break;
+                        }
+                        li[i].setAttribute('class','');
+                    }
+                    if (audio.ended) {
+                        wordEl.style.marginTop = marTop + 'px';
+                        count = 0;
+                    }
+                };
+                audio.onseeked = function () {
+                    let cur_time = audio.currentTime;
+                    for (let _i = 0; _i <= lyricArr.length - 1; _i++) {
+                        if (cur_time >= lyricArr[_i].time && cur_time <= lyricArr[_i + 1].time)
+                            count = _i;
+                    }
+                };
+                function isVaildTime(time, index) {
+                    if (index < lyricArr.length - 1) {
+                        return time >= lyricArr[index].time && time <= lyricArr[index + 1].time;
+                    } else {
+                        return time <= audio.duration;
+                    }
+                }
+            });
+        }
+    });
 </script>
 </html>

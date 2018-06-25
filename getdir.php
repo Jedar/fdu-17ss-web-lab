@@ -1,14 +1,19 @@
 <?php
     $files = array();
-    if($handle = @opendir('upload')) { //注意这里要加一个@，不然会有warning错误提示：）
+    if($handle = @opendir('upload')) {
         while(($file = readdir($handle)) !== false) {
-            if($file != ".." && $file != ".") { //排除根目录；
-                if(end(explode(".",$file)) !== 'lrc') {
-                    $files[] = iconv('gb2312','utf-8',$file);
+            if($file != ".." && $file != ".") {
+                $en = getExtendedName($file);
+                if ($en == 'mp3'){
+                    $files[] = $file;
                 }
             }
         }
         closedir($handle);
-        echo json_encode($files);
+        print json_encode($files);
     }
+function getExtendedName($fileName){
+        $ex = explode(".",$fileName);
+    return $ex[count($ex)-1];
+}
 ?>

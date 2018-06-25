@@ -1,48 +1,40 @@
 <?php
   if($_SERVER["REQUEST_METHOD"] == 'GET'||$_SERVER["REQUEST_METHOD"] == 'POST'){
-      upload();
+      uploadMusicFile('file');
+      $lyric = $_POST['edit_lyric'];
+      $title = $_POST['title'];
+      $artist = $_POST['artist'];
+      $txt = "[ti:$title]\n[ar:$artist]\n".$lyric;
+      $path = "upload/".$artist." - ".$title .".lrc";
+      $myfile = fopen(iconv ( 'UTF-8', 'GBK', $path ),"w");
+      fwrite($myfile, $txt);
+      fclose($myfile);
   }else{
       exit();
   }
 function uploadMusicFile($fileField){
-    $upfile = array();
+    $backInfo = array();
     $files = $_FILES[$fileField];
     $fileName = $files['name'];
     $fileType = $files["type"];
     $fileTemp = $files['tmp_name'];
     error_log($files['size']);
-    //why here get file size 0???
-    if($fileName != "" and $fileTemp != "" and $fileType != ""){
+    if($fileName != "" && $fileTemp != "" && $fileType != ""){
         if(allowType($fileType)){
-            $upfile["filesize"] = filesize($fileTemp);
-            $filePath = "upload/";
             $newFileName = $fileName;
-            $upfile["filename"] = $newFileName;
-            $upfile["filetype"] = $fileType;
-            if(file_exists($filePath . $newFileName)){
-                unlink($filePath . $newFileName);
+            if(file_exists("upload/".$newFileName)){
+                unlink("upload/".$newFileName);
             }
-            $upfile["filestat"] = @move_uploaded_file($fileTemp,$filePath.$fileName) ? "true" : "false";
-            header("Location:lab11.html");
+            $backInfo["filestate"] = @move_uploaded_file($fileTemp,"upload/".$fileName) ? "true" : "false";
         }else{
-            $upfile["filename"] = "非法的文件类型";
-            $upfile["filestat"] = "false";
+            $backInfo["filename"] = "不合法的文件类型";
+            $backInfo["filestate"] = "false";
         }
     }else{
-        $upfile["filename"] = "无效的文件数据";
-        $upfile["filestat"] = "false";
+        $backInfo["filename"] = "上传数据失败";
+        $backInfo["filestate"] = "false";
     }
-}
-function upload(){
-    uploadMusicFile('file_upload');
-    $lyric = $_POST['edit_lyric'];
-    $title = $_POST['title'];
-    $artist = $_POST['artist'];
-    $txt = "[ti:$title]\n[ar:$artist]\n".$lyric;
-    $path = "upload/".$artist." - ".$title .".lrc";
-    $myfile = fopen(iconv ( 'UTF-8', 'GBK', $path ),"w");//编码转换
-    fwrite($myfile, $txt);
-    fclose($myfile);
+    print json_encode($backInfo);
 }
 function allowType($type){
     $types = array('application/x-js','application/octet-stream','application/x-php','text/html');
